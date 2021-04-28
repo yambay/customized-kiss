@@ -1,9 +1,10 @@
 .content .gallery a, 
 .content .gallery a:hover {
     border-bottom: none;
-    max-width: 33%;
+    max-width: 33% - 5px;
 }
 
 .content .gallery img {
     max-height: 200px;
+    max-width: 32%;
 }
