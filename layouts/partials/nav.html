@@ -2,12 +2,22 @@
   <div class="container">
     <nav id="nav-main" class="nav">
       <div id="nav-name" class="nav-left">
-        <a id="nav-anchor" class="nav-item" href="{{ .Site.BaseURL }}">
+        <a id="nav-anchor" class="nav-item" href="{{ .Site.BaseURL }}{{.Language}}">
           <h1 id="nav-heading" class="title is-4">{{ .Site.Title }}</h1>
         </a>
       </div>
       <div class="nav-right">
         <nav id="nav-items" class="nav-item level is-mobile">
+          {{ if .IsTranslated }}
+            {{ range .Translations }}
+              {{ $posts_count := len .Site.RegularPages }}
+              {{if gt $posts_count 0}}
+              <a href="{{ .Permalink }}">
+                <span class="icon">{{ .Language }} </span>
+              </a>
+              {{ end}}
+            {{ end}}
+          {{ end }}
           {{- $social := ( .Site.Params.social ) -}}
           {{- range $platform := $social.config.platforms -}}
           {{- with $username := ( index $social $platform ) -}}
