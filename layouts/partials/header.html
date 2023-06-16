@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ if eq .IsHome false }}
 <title>{{ .Title }} | {{ .Site.Title }}</title>
+<meta property="og:title" content="{{ .Title }}" />
 {{ else }}
 <title>{{ .Site.Title }}</title>
+<meta property="og:title" content="{{ .Site.Title }}" />
 {{ end }}
 {{ if .Site.Params.Info.enableSocial }}
 {{- partial "social/opengraph" . -}}
@@ -36,7 +38,10 @@
 <link rel="manifest" href="{{ "site.webmanifest" | relURL }}">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 <link rel="canonical" href="{{ .Permalink }}">
+<meta property="og:url" content="{{ .Permalink }}" />
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="website" />
+<!--meta property="og:image" content="https://ia.media-imdb.com/images/rock.jpg" /-->
 </head>
 <body>
