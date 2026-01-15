@@ -9,7 +9,7 @@
     </div>
     {{if not .Date.IsZero }}
     <h2 class="subtitle is-6">
-      {{- $.Site.Params.Info.dateFormat | default "January 2, 2006" | .Date.Format -}}
+      {{ .Date | time.Format ":date_long" }}
     </h2>
     {{ end }}
     <h1 class="title">{{ .Title }}</h1>

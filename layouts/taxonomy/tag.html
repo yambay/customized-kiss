@@ -11,7 +11,7 @@
         {{ end }}
       </div>
       <h2 class="subtitle is-6 date">
-        {{- $.Site.Params.Info.dateFormat | default "January 2, 2006" | .Date.Format -}}
+        {{ .Date | time.Format ":date_long" }}
       </h2>
       <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
       <div class="content">
