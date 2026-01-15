@@ -9,16 +9,13 @@
       <div class="nav-right">
         <nav id="nav-items" class="nav-item level is-mobile">
           {{ if .IsTranslated }}
-            {{ range $index, $translation := .Translations }}
+            {{ range .Translations }}
               {{ $posts_count := len .Site.RegularPages }}
               {{ if gt $posts_count 0}}
-                {{ if ne $index 0 }}
-                  |
-                {{ end}}  
                 <a href="{{ .Permalink }}">
                   <span class="lang">{{ .Language.LanguageName  }} </span>
-                </a>
-              {{ end}}
+                </a>                
+              {{ end}}              
             {{ end}}
           {{ end }}
           {{- $social := ( .Site.Params.social ) -}}
