@@ -179,6 +179,10 @@ code[data-lang] {
   color: inherit;
 }
 
+.lang {
+  padding: 0 7px;
+}
+
 *,
 :after,
 :before {
