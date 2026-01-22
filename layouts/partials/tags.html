@@ -1,9 +1,9 @@
 {{ range first 1 . }}
-<a class="subtitle is-6" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">#{{ . }}</a>
+<a class="subtitle is-6" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">#{{ T . | default . }}</a>
 {{ end }}
 
 {{ if gt (len .) 1 }}
   {{ range after 1 . }}
-  | <a class="subtitle is-6" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">#{{ . }}</a>
+  | <a class="subtitle is-6" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">#{{ T . | default . }}</a>
   {{ end }}
 {{ end }}
