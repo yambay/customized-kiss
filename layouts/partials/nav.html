@@ -13,7 +13,7 @@
               {{ $posts_count := len .Site.RegularPages }}
               {{ if gt $posts_count 0}}
                 <a href="{{ .Permalink }}">
-                  <span class="lang">{{ .Language.LanguageName  }} </span>
+                  <span class="lang">{{ .Language.Label  }} </span>
                 </a>                
               {{ end}}              
             {{ end}}

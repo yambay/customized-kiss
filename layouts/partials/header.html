@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" {{ with .Site.LanguageCode }} lang="{{ . }}"{{ end }}>
+<html xmlns="http://www.w3.org/1999/xhtml" {{ with .Site.Language.Locale }} lang="{{ . }}"{{ end }}>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,7 +32,7 @@
 {{ end }}
 {{ if .IsTranslated }}
 	{{ range .Translations }}
-	<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.LanguageName }}">
+	<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" title="{{ .Language.Label }}">
 	{{ end }}
 {{ end }}
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
