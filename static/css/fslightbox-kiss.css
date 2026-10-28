@@ -1,4 +1,4 @@
-.content .gallery a, 
+.content .gallery a,
 .content .gallery a:hover {
     border-bottom: none;
     max-width: 33% - 5px;
@@ -11,8 +11,37 @@
 
 @media screen and (max-width: 900px) {
     .content .gallery img {
-        max-height: 250px;        
+        max-height: 250px;
         max-width: 100%;
     }
   }
-  
+
+.content .gallery--manifest {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem;
+}
+
+.content .gallery--manifest figure {
+    margin: 0;
+    min-width: 0;
+    text-align: left;
+}
+
+.content .gallery--manifest a {
+    display: block;
+    max-width: 100%;
+}
+
+.content .gallery--manifest img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: none;
+}
+
+.content .gallery--manifest figcaption {
+    margin-top: 0.35rem;
+    font-size: 0.9em;
+}

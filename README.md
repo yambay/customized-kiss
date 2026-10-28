@@ -18,6 +18,62 @@ git clone https://github.com/ribice/kiss.git
 
 ## Site Configuration
 
+### Media galleries
+
+Set `gallery: true` in a page bundle's front matter to enable its gallery.
+When the bundle contains `media.yaml`, the gallery uses the manifest instead
+of local `gallery/*.jpg` images. Existing local galleries remain supported.
+
+Configure the public media base URL in the site's configuration:
+
+```yaml
+params:
+  mediaBaseURL: "https://media.yambay.me/posts"
+module:
+  mounts:
+    - source: content
+      target: content
+    - source: content
+      target: assets/post-media
+      files: ['**/media.yaml']
+```
+
+The asset mount makes the shared manifest available even when a page bundle
+has no translation in the site's default language. Keep any existing mounts
+and filters when adding it. The manifest is read as data; the theme does not
+download or publish the referenced images.
+
+```yaml
+version: 1
+images:
+  - id: coast
+    original_filename: coast.jpg
+    order: 1
+    alt:
+      en: "Colourful houses above the sea"
+    caption:
+      en: "A view of the coast."
+    variants:
+      full:
+        key: "2026/trip/coast.jpg"
+        width: 1920
+        height: 1440
+      thumbnail:
+        key: "2026/trip/coast_thumb.jpg"
+        width: 400
+        height: 300
+```
+
+Keys are relative to `params.mediaBaseURL`, including its path prefix.
+Images are sorted by `order`. Thumbnails include dimensions, lazy loading,
+and links to full-size images in the lightbox. Captions are passed through
+`data-caption` and displayed inside FsLightbox Pro, including when thumbnails
+are open. The script URL includes the Pro version to invalidate older cached
+builds; update it when upgrading the bundled library. Texts use the current language, falling back to the site's
+default language. If no alt text is available, the filename or image ID is
+used; missing captions are omitted. Missing variant keys or dimensions,
+unsupported manifest versions, and an absent base URL fail the build.
+
 ### Shared local images
 
 Keep `markup.goldmark.duplicateResourceFiles: false` to share images between
@@ -43,6 +99,8 @@ and publish a single image under `/post-images/<bundle-directory>/`.
 Translations share both full images and generated gallery thumbnails.
 Missing relative Markdown images fail the build. Absolute and external image
 URLs are preserved. Original archives are excluded from the asset mount.
+
+### General settings
 
 Take a look in the [exampleSite](https://github.com/ribice/kiss/tree/master/exampleSite) folder.
 

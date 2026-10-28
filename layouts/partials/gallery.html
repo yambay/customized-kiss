@@ -1,12 +1,52 @@
-{{ $images := .Resources.Match "gallery/*.jp*g"}}
+{{ $images := .Resources.Match "gallery/*.jp*g" }}
 {{ if not $images }}
     {{ with .File }}
         {{ $images = resources.Match (path.Join "post-images" .Dir "gallery/*.jp*g") }}
     {{ end }}
 {{ end }}
 
-{{if $images}}
+{{ $manifest := .Resources.Get "media.yaml" }}
+{{ if not $manifest }}
+    {{/* Shared page resources may be absent in bundles without a default-language page. */}}
+    {{ with .File }}
+        {{ $manifest = resources.Get (path.Join "post-media" .Dir "media.yaml") }}
+    {{ end }}
+{{ end }}
 
+{{ if or $manifest $images }}
+
+{{ with $manifest }}
+    {{ $data := . | transform.Unmarshal }}
+    {{ $baseURL := strings.TrimRight "/" ($.Site.Params.mediaBaseURL | default "") }}
+    {{ if not $baseURL }}
+        {{ errorf "Gallery %s: params.mediaBaseURL is required for media.yaml" $.RelPermalink }}
+    {{ end }}
+    {{ if ne (int $data.version) 1 }}
+        {{ errorf "Gallery %s: unsupported media.yaml version %v" $.RelPermalink $data.version }}
+    {{ end }}
+    {{ if not $data.images }}
+        {{ errorf "Gallery %s: media.yaml must contain images" $.RelPermalink }}
+    {{ end }}
+<div class="gallery gallery--manifest">
+    {{ range sort $data.images "order" "asc" }}
+        {{ $full := .variants.full }}
+        {{ $thumbnail := .variants.thumbnail }}
+        {{ if not (and $full.key $full.width $full.height $thumbnail.key $thumbnail.width $thumbnail.height) }}
+            {{ errorf "Gallery %s: image %q requires full and thumbnail keys and dimensions" $.RelPermalink .id }}
+        {{ end }}
+        {{ $altTexts := .alt | default dict }}
+        {{ $captions := .caption | default dict }}
+        {{ $defaultLang := hugo.Sites.Default.Language.Lang }}
+        {{ $alt := index $altTexts $.Language.Lang | default (index $altTexts $defaultLang) | default .original_filename | default .id }}
+        {{ $caption := index $captions $.Language.Lang | default (index $captions $defaultLang) }}
+    <figure>
+        <a data-fslightbox data-type="image" data-alt="{{ $alt }}"{{ with $caption }} data-caption="{{ . }}"{{ end }} href="{{ $baseURL }}/{{ strings.TrimLeft "/" $full.key }}">
+            <img src="{{ $baseURL }}/{{ strings.TrimLeft "/" $thumbnail.key }}" width="{{ $thumbnail.width }}" height="{{ $thumbnail.height }}" alt="{{ $alt }}" loading="lazy" decoding="async"/>
+        </a>
+    </figure>
+    {{ end }}
+</div>
+{{ else }}
 <div class="gallery">
 
 {{ range $gallery_item := $images }}
@@ -17,10 +57,12 @@
 {{ end }}
 
 </div>
+{{ end }}
 
-<script src='{{ "js/fslightbox.js" | relURL }}'></script>
+<script src='{{ "js/fslightbox.js" | relURL }}?v=3.8.9-pro'></script>
 <script>
     fsLightbox.props.loadOnlyCurrentSource = true;
+    fsLightbox.props.showThumbsWithCaptions = true;
 </script>
 <link rel="stylesheet" href='{{ "css/fslightbox-kiss.css" | relURL }}'>
 
