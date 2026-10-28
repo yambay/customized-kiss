@@ -18,6 +18,32 @@ git clone https://github.com/ribice/kiss.git
 
 ## Site Configuration
 
+### Shared local images
+
+Keep `markup.goldmark.duplicateResourceFiles: false` to share images between
+translations. For bundles without a default-language page, expose their
+public images as global assets in the site's configuration:
+
+```yaml
+module:
+  mounts:
+    - source: content
+      target: content
+      files: ['! **/originals/**']
+    - source: content
+      target: assets/post-images
+      files:
+        - '**/*.{jpg,jpeg,png,gif,webp,avif,svg}'
+        - '! **/originals/**'
+```
+
+The Markdown image render hook and gallery prefer page resources, preserving
+existing shared URLs. When those are unavailable, they use the asset mount
+and publish a single image under `/post-images/<bundle-directory>/`.
+Translations share both full images and generated gallery thumbnails.
+Missing relative Markdown images fail the build. Absolute and external image
+URLs are preserved. Original archives are excluded from the asset mount.
+
 Take a look in the [exampleSite](https://github.com/ribice/kiss/tree/master/exampleSite) folder.
 
 This directory contains an example config file and the content for the demo.

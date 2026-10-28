@@ -1,4 +1,9 @@
 {{ $images := .Resources.Match "gallery/*.jp*g"}}
+{{ if not $images }}
+    {{ with .File }}
+        {{ $images = resources.Match (path.Join "post-images" .Dir "gallery/*.jp*g") }}
+    {{ end }}
+{{ end }}
 
 {{if $images}}
 

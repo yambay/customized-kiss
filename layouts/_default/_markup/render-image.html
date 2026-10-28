@@ -1,0 +1,19 @@
+{{- $url := urls.Parse .Destination -}}
+{{- $src := .Destination -}}
+{{- $image := false -}}
+{{- if and (not $url.IsAbs) (not $url.Host) (not (strings.HasPrefix $url.Path "/")) -}}
+    {{- $image = .Page.Resources.Get $url.Path -}}
+    {{- if not $image -}}
+        {{- with .Page.File -}}
+            {{- $image = resources.Get (path.Join "post-images" .Dir $url.Path) -}}
+        {{- end -}}
+    {{- end -}}
+    {{- with $image -}}
+        {{- $src = .RelPermalink -}}
+        {{- with $url.RawQuery -}}{{- $src = printf "%s?%s" $src . -}}{{- end -}}
+        {{- with $url.Fragment -}}{{- $src = printf "%s#%s" $src . -}}{{- end -}}
+    {{- else -}}
+        {{- errorf "Image %q not found for page %s" .Destination .Page.RelPermalink -}}
+    {{- end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}>
